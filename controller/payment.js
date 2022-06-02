@@ -53,6 +53,8 @@ exports.payment = (req, res) => {
   return stripe.customers
     .create({
       email: email,
+      name: name,
+      phone: phone,
       source: token.id,
     })
     .then((customer) => {
@@ -70,3 +72,5 @@ exports.payment = (req, res) => {
     .then((result) => res.status(200).json(result))
     .catch((err) => console.log(err));
 };
+
+exports.getPayment = (req, res) => {};
