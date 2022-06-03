@@ -34,6 +34,8 @@ const Form = sequelize.define("form", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  link: DataTypes.STRING,
+  token: DataTypes.STRING,
 });
 
 module.exports = Form;
