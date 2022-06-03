@@ -36,8 +36,8 @@ app.use("/auth", authRoutes);
 app.use(paymentRoutes);
 
 sequelize
-  .sync({ force: true })
-  // .sync()
+  // .sync({ force: true })
+  .sync()
   .then((result) => {
     app.listen(8000);
   })
