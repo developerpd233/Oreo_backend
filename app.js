@@ -44,3 +44,7 @@ sequelize
   .catch((error) => {
     console.log(error);
   });
+
+// localhost:8000/login
+//   localhost:8000/payment
+//   localhost:8000/all-invoices

@@ -7,48 +7,22 @@ const PUBLISHABLE_KEY =
 
 const stripe = require("stripe")(SECRET_KEY);
 
+const nodemailer = require("nodemailer");
+
+let transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  secure: true,
+  auth: {
+    user: "developerpd233@gmail.com",
+    pass: "admin@123??",
+  },
+});
+
 const Form = require("../model/payment");
 
-// exports.payment = async (req, res, next) => {
-//   const { name, email, phone, price, currency, description } = req.body;
-
-//   // const idempontenceyKey = uuid()
-
-//   const form = new Form({
-//     name,
-//     email,
-//     phone,
-//     price,
-//     description,
-//     currency,
-//   });
-
-//   // const savedFormData = await form.save();
-//   stripe.customers
-//     .create({
-//       email: email,
-//       source: req.body.stripeToken,
-//       name: name,
-//       phone: phone,
-//     })
-//     .then((customer) => {
-//       return stripe.charges.create({
-//         amount: price, // Charing Rs 25
-//         description: description,
-//         currency: currency,
-//       });
-//     })
-//     .then((charge) => {
-//       res.send("Success"); // If no error occurs
-//     })
-//     .catch((err) => {
-//       res.send(err); // If some error occurs
-//     });
-// };
-
 exports.payment = async (req, res) => {
-  const { id, price, currency, description, name, email } = req.body;
-  console.log("stripe-routes.js 10 | amount and id", price, id);
+  const { id, price, currency, description, name, email, status } = req.body;
+
   try {
     const payment = await stripe.paymentIntents.create({
       name: name,
@@ -73,15 +47,31 @@ exports.payment = async (req, res) => {
     });
 
     console.log("stripe-routes.js 19 | payment", payment);
+    status = "Paid";
     res.json({
       message: "Payment Successful",
       success: true,
+      status: status,
     });
+
+    let from = "developerpd233@gmail.com";
+    const mailOptions = {
+      from: from,
+      to: { email, from },
+      subject: "Payment Successful",
+      html: `<h4>'you have Successfully paid the given amount '</h4>
+      <p>Thanks for your Purchase</p>
+      `,
+    };
+
+    transporter.sendMail();
   } catch (error) {
     console.log("stripe-routes.js 17 | error", error);
+    status = "Unpaid";
     res.json({
       message: "Payment Failed",
       success: false,
+      status: status,
     });
   }
 };

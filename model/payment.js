@@ -34,6 +34,11 @@ const Form = sequelize.define("form", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    default: "Unpaid",
+  },
   link: DataTypes.STRING,
   token: DataTypes.STRING,
 });
