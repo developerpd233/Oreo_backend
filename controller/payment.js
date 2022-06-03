@@ -33,21 +33,21 @@ exports.payment = async (req, res) => {
       payment_method: id,
       confirm: true,
     });
-    crypto.randomBytes(32, (err, buffer) => {
-      if (err) {
-        res
-          .status(500)
-          .json({ msg: "Request cant be processed at the moment" });
-      }
-      const token = buffer.toString("hex");
-      Form.findOne({ where: { id: id } }).then((result) => {
-        const generatedLink = `http://localhost:3000/client-form/?invoiceNum=${id}/?key=${token}`;
-        return res.send({ link: generatedLink });
-      });
-    });
+    // crypto.randomBytes(32, (err, buffer) => {
+    //   if (err) {
+    //     res
+    //       .status(500)
+    //       .json({ msg: "Request cant be processed at the moment" });
+    //   }
+    //   const token = buffer.toString("hex");
+    //   Form.findOne({ where: { id: id } }).then((result) => {
+    //     const generatedLink = `http://localhost:3000/client-form/?invoiceNum=${id}/?key=${token}`;
+    //     return res.send({ link: generatedLink });
+    //   });
+    // });
 
     console.log("stripe-routes.js 19 | payment", payment);
-    status = "Paid";
+    Form.status = "Paid";
     res.json({
       message: "Payment Successful",
       success: true,
@@ -63,11 +63,15 @@ exports.payment = async (req, res) => {
       <p>Thanks for your Purchase</p>
       `,
     };
-
-    transporter.sendMail();
+    transporter.sendMail(mailOptions, (error, success) => {
+      if (error) {
+        return res.json({ error: "Unable to send Email at the moment" });
+      }
+      res.json({ msg: "Email Sent!" });
+    });
   } catch (error) {
     console.log("stripe-routes.js 17 | error", error);
-    status = "Unpaid";
+    Form.status = "Unpaid";
     res.json({
       message: "Payment Failed",
       success: false,
@@ -77,8 +81,9 @@ exports.payment = async (req, res) => {
 };
 
 exports.getInvoices = (req, res) => {
-  const { name, email, phone, price, currency, description, id } = req.body;
-  Form.findAll({ where: { id } })
+  const { name, email, phone, price, currency, description, id, link, status } =
+    req.body;
+  Form.findAll()
     .then((allInvoices) => {
       if (!allInvoices) {
         return res.json({ msg: "No Invoices found" });
