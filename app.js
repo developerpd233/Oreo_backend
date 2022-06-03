@@ -45,6 +45,7 @@ sequelize
     console.log(error);
   });
 
-// localhost:8000/login
-//   localhost:8000/payment
-//   localhost:8000/all-invoices
+// localhost:8000/login ------------ post
+//   localhost:8000/payment ---------- post
+//   localhost:8000/all-invoices ------- get
+// localhost:8000/form-data ------------ post

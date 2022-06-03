@@ -18,10 +18,6 @@ const Form = sequelize.define("form", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  phone: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   price: {
     type: DataTypes.FLOAT,
     allowNull: false,
