@@ -18,7 +18,7 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-const Form = require("../model/payment");
+const Form = require("../model/form");
 
 exports.payment = async (req, res) => {
   const { id, price, currency, description, name, email, status } = req.body;

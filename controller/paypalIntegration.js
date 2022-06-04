@@ -1,6 +1,6 @@
 const paypal = require("paypal-rest-sdk");
 
-const Form = require("../model/payment");
+const Form = require("../model/form");
 
 exports.paypalIntegration = (req, res, next) => {
   const { name, email, price, currency, description, link } = req.body;
