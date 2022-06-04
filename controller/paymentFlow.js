@@ -126,14 +126,17 @@ exports.deleteInvoice = async (req, res) => {
 exports.editInvoice = async (req, res) => {
   const invoiceID = req.params.invoiceID;
   const { price, currency, description, name, email, status, link } = req.body;
-  const updatedInvoice = await Form.update({
-    price,
-    currency,
-    description,
-    name,
-    email,
-    link,
-  });
+  const updatedInvoice = await Form.update(
+    {
+      price,
+      currency,
+      description,
+      name,
+      email,
+      link,
+    },
+    { where: { id: invoiceID } }
+  );
 
   res.json({ msg: "Data Updated", updatedInvoice });
 };

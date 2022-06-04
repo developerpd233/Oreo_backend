@@ -15,7 +15,7 @@ router.post("/paypal-payment", paypalIntegrationController.paypalIntegration);
 
 router.get("/success", paypalIntegrationController.success);
 
-router.patch("/edit-invoice/", paymentController.editInvoice);
+router.patch("/edit-invoice/:invoiceID", paymentController.editInvoice);
 
 router.delete("/invoice/:invoiceID", paymentController.deleteInvoice);
 
