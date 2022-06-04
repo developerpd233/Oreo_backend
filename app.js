@@ -49,3 +49,4 @@ sequelize
 //   localhost:8000/payment ---------- post
 //   localhost:8000/all-invoices ------- get
 // localhost:8000/form-data ------------ post
+// localhost:8000/paypal-payment ------------ post

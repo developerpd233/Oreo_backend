@@ -3,11 +3,16 @@ const express = require("express");
 const router = express.Router();
 
 const paymentController = require("../controller/paymentFlow");
+const paypalIntegrationController = require("../controller/paypalIntegration");
 
 router.post("/payment", paymentController.payment);
 
 router.post("/form-data", paymentController.getFormData);
 
 router.get("/all-invoices", paymentController.getInvoices);
+
+router.post("/paypal-payment", paypalIntegrationController.paypalIntegration);
+
+router.get("/success", paypalIntegrationController.success);
 
 module.exports = router;
