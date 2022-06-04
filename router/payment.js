@@ -7,12 +7,16 @@ const paypalIntegrationController = require("../controller/paypalIntegration");
 
 router.post("/payment", paymentController.payment);
 
-router.post("/form-data", paymentController.getFormData);
+router.post("/invoice", paymentController.getFormData);
 
 router.get("/all-invoices", paymentController.getInvoices);
 
 router.post("/paypal-payment", paypalIntegrationController.paypalIntegration);
 
 router.get("/success", paypalIntegrationController.success);
+
+router.patch("/edit-invoice/", paymentController.editInvoice);
+
+router.delete("/invoice/:invoiceID", paymentController.deleteInvoice);
 
 module.exports = router;

@@ -35,18 +35,24 @@ app.use((error, req, res, next) => {
 app.use("/auth", authRoutes);
 app.use(paymentRoutes);
 
+app.get("/", (req, res) => {
+  res.json("hello");
+});
+
 sequelize
   // .sync({ force: true })
   .sync()
   .then((result) => {
-    app.listen(8000);
+    app.listen(8080);
   })
   .catch((error) => {
     console.log(error);
   });
 
-// localhost:8000/login ------------ post
-//   localhost:8000/payment ---------- post
-//   localhost:8000/all-invoices ------- get
-// localhost:8000/form-data ------------ post
-// localhost:8000/paypal-payment ------------ post
+// localhost:8080/login ------------ post
+//   localhost:8080/payment ---------- post
+//   localhost:8080/all-invoices ------- get
+// localhost:8080/invoice------------ post
+// localhost:8080/paypal-payment ------------ post
+// localhost:8080/edit-invoice ------------ patch
+// localhost:8080/invoice/:id ------------ delete

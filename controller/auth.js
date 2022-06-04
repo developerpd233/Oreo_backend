@@ -46,6 +46,7 @@ exports.login = async (req, res, next) => {
   if (userExists) {
     if (userExists != null) {
       const isMatch = await bcrypt.compare(password, userExists.password);
+      console.log(isMatch);
       if (userExists.email === email && isMatch) {
         // Generate JWT Token
         const token = jwt.sign({ userID: userExists.id }, "myJWTSecret", {

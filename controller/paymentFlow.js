@@ -110,3 +110,30 @@ exports.payment = async (req, res) => {
     });
   }
 };
+
+exports.deleteInvoice = async (req, res) => {
+  const invoiceID = req.params.invoiceID;
+  const invoice = await Form.findOne({ where: { id: invoiceID } });
+  if (!invoice) {
+    const error = new Error("Could not find invoice.");
+    error.statusCode = 404;
+    throw error;
+  }
+  await Form.destroy({ where: { id: invoiceID } });
+  res.json({ msg: "successfully deleted Invoice" });
+};
+
+exports.editInvoice = async (req, res) => {
+  const invoiceID = req.params.invoiceID;
+  const { price, currency, description, name, email, status, link } = req.body;
+  const updatedInvoice = await Form.update({
+    price,
+    currency,
+    description,
+    name,
+    email,
+    link,
+  });
+
+  res.json({ msg: "Data Updated", updatedInvoice });
+};
