@@ -11,6 +11,8 @@ router.post("/invoice", paymentController.getFormData);
 
 router.get("/all-invoices", paymentController.getInvoices);
 
+router.get("invoice", paymentController.getInvoice);
+
 router.post("/paypal-payment", paypalIntegrationController.paypalIntegration);
 
 router.get("/success", paypalIntegrationController.success);

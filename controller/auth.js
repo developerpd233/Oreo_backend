@@ -5,30 +5,36 @@ const bcrypt = require("bcrypt");
 
 exports.signup = async (req, res, next) => {
   const { email, password } = req.body;
+  try {
+    // if user already exists
+    const existsUser = await User.findOne({ where: { email: email } });
 
-  // if user already exists
-  const existsUser = await User.findOne({ where: { email: email } });
-
-  if (existsUser) {
-    return res.json({ message: "A user with that email already exists!" });
-  }
-  const salt = await bcrypt.genSalt(10);
-  const hashedPw = await bcrypt.hash(password, salt);
-  const user = new User({
-    email: email,
-    password: hashedPw,
-  });
-  const savedUser = await user.save().catch((error) => {
-    console.log(error);
-    if (password.length < 7 || password.length === "") {
-      res.json({
-        error: "Cant register, password must be 7 characters long",
-      });
+    if (existsUser) {
+      return res.json({ message: "A user with that email already exists!" });
     }
-  });
+    const salt = await bcrypt.genSalt(10);
+    const hashedPw = await bcrypt.hash(password, salt);
+    const user = new User({
+      email: email,
+      password: hashedPw,
+    });
+    const savedUser = await user.save().catch((error) => {
+      console.log(error);
+      if (password.length < 7 || password.length === "") {
+        res.json({
+          error: "Cant register, password must be 7 characters long",
+        });
+      }
+    });
 
-  if (savedUser) {
-    res.json({ msg: "Thanks for registering" });
+    if (savedUser) {
+      res.json({ msg: "Thanks for registering" });
+    }
+  } catch (error) {
+    let isValid = email.includes("@");
+    if (!isValid) {
+      res.json({ error: "Email is not Valid, Please enter a valid email" });
+    }
   }
 };
 

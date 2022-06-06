@@ -46,9 +46,22 @@ exports.getInvoices = (req, res) => {
       }
       res.json({ invoices: allInvoices });
     })
-    .catch((err) => {
-      throw new Error("Something went wrong");
+    .catch((error) => {
+      if (!allInvoices) {
+        return res.json({ error: "No Invoices found" });
+      }
     });
+};
+
+exports.getInvoice = async (req, res, next) => {
+  const { name, email, phone, price, currency, description, id, link, status } =
+    req.body;
+  const singleInvoice = Form.findOne({ where: { id: id } });
+  if (!singleInvoice) {
+    return res.json({ msg: "No invoice found" });
+  } else {
+    res.json({ msg: "fetched Single Invoice", singleInvoice });
+  }
 };
 
 exports.payment = async (req, res) => {
