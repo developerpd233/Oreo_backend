@@ -62,30 +62,33 @@ exports.paypalIntegration = (req, res, next) => {
 exports.success = (req, res) => {
   const payerID = req.query.PayerID;
   const paymentID = req.query.paymentId;
-
-  const execute_payment_json = {
-    payer_id: payerID,
-    transactions: [
-      {
-        amount: {
-          currency: currency,
-          total: price,
+  try {
+    const execute_payment_json = {
+      payer_id: payerID,
+      transactions: [
+        {
+          amount: {
+            currency: currency,
+            total: price,
+          },
         },
-      },
-    ],
-  };
+      ],
+    };
 
-  paypal.payment.execute(
-    paymentID,
-    execute_payment_json,
-    function (err, payment) {
-      if (err) {
-        console.log(err.response);
-        throw err;
-      } else {
-        console.log("Payment response");
-        res.json({ msg: "Successfully paid ", payment: payment });
+    paypal.payment.execute(
+      paymentID,
+      execute_payment_json,
+      function (err, payment) {
+        if (err) {
+          console.log(err.response);
+          throw err;
+        } else {
+          console.log("Payment response");
+          res.json({ msg: "Successfully paid ", payment: payment });
+        }
       }
-    }
-  );
+    );
+  } catch (error) {
+    res.json({ msg: "Something went wrong" });
+  }
 };

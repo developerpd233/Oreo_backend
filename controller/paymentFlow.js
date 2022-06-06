@@ -20,20 +20,38 @@ const Form = require("../model/form");
 
 exports.getFormData = async (req, res) => {
   const { price, currency, description, name, email, status, link } = req.body;
+  try {
+    if (!price && !currency && !description && !name && !email) {
+      return res.json({ msg: "Please fill all the fields" });
+    }
+    const formData = new Form({
+      price,
+      currency,
+      description,
+      name,
+      email,
+      link,
+      status,
+    });
 
-  const formData = new Form({
-    price,
-    currency,
-    description,
-    name,
-    email,
-    link,
-    status,
-  });
+    const savedFormData = await formData.save();
 
-  const savedFormData = await formData.save();
-
-  res.json({ data: "data stored", formData: savedFormData });
+    res.json({ data: "data stored", formData: savedFormData });
+  } catch (error) {
+    if (!price) {
+      res.json({ msg: "please provide the amount " });
+    }
+    if (!currency) {
+      res.json({ error: "Currency is not valid." });
+    }
+    if (!name) {
+      res.json({ error: "Name cant be empty" });
+    }
+    let isValid = email.includes("@");
+    if (!email || !isValid) {
+      res.json({ msg: "please provide a valid email" });
+    }
+  }
 };
 
 exports.getInvoices = (req, res) => {
@@ -57,10 +75,16 @@ exports.getInvoice = async (req, res, next) => {
   const { name, email, phone, price, currency, description, id, link, status } =
     req.body;
   const singleInvoice = Form.findOne({ where: { id: id } });
-  if (!singleInvoice) {
-    return res.json({ msg: "No invoice found" });
-  } else {
-    res.json({ msg: "fetched Single Invoice", singleInvoice });
+  try {
+    if (!singleInvoice) {
+      return res.json({ msg: "No invoice found" });
+    } else {
+      res.json({ msg: "fetched Single Invoice", singleInvoice });
+    }
+  } catch (error) {
+    if (!singleInvoice) {
+      res.json({ msg: "No Invoice with that id found" });
+    }
   }
 };
 
@@ -126,30 +150,38 @@ exports.payment = async (req, res) => {
 
 exports.deleteInvoice = async (req, res) => {
   const invoiceID = req.params.invoiceID;
-  const invoice = await Form.findOne({ where: { id: invoiceID } });
-  if (!invoice) {
-    const error = new Error("Could not find invoice.");
-    error.statusCode = 404;
-    throw error;
+  try {
+    const invoice = await Form.findOne({ where: { id: invoiceID } });
+    if (!invoice) {
+      const error = new Error("Could not find invoice.");
+      error.statusCode = 404;
+      throw error;
+    }
+    await Form.destroy({ where: { id: invoiceID } });
+    res.json({ msg: "successfully deleted Invoice" });
+  } catch (error) {
+    res.json({ error: "No Invoice found" });
   }
-  await Form.destroy({ where: { id: invoiceID } });
-  res.json({ msg: "successfully deleted Invoice" });
 };
 
 exports.editInvoice = async (req, res) => {
   const invoiceID = req.params.invoiceID;
   const { price, currency, description, name, email, status, link } = req.body;
-  const updatedInvoice = await Form.update(
-    {
-      price,
-      currency,
-      description,
-      name,
-      email,
-      link,
-    },
-    { where: { id: invoiceID } }
-  );
+  try {
+    const updatedInvoice = await Form.update(
+      {
+        price,
+        currency,
+        description,
+        name,
+        email,
+        link,
+      },
+      { where: { id: invoiceID } }
+    );
 
-  res.json({ msg: "Data Updated", updatedInvoice });
+    res.json({ msg: "Data Updated", updatedInvoice });
+  } catch (error) {
+    res.json({ error: "No Invoice found" });
+  }
 };

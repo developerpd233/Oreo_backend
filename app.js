@@ -61,3 +61,5 @@ sequelize
 // localhost:8080/paypal-payment ------------ post
 // localhost:8080/edit-invoice ------------ patch
 // localhost:8080/invoice/:id ------------ delete
+// localhost:8080/get-in-touch ------------ post
+// localhost:8080/contact ------------ post

@@ -91,6 +91,8 @@ exports.getInvoices = (req, res) => {
       res.json({ invoices: allInvoices });
     })
     .catch((err) => {
-      throw new Error("Something went wrong");
+      if (!id) {
+        return res.json({ msg: "No Invoices found" });
+      }
     });
 };

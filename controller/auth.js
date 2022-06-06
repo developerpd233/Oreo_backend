@@ -35,45 +35,53 @@ exports.signup = async (req, res, next) => {
     if (!isValid) {
       res.json({ error: "Email is not Valid, Please enter a valid email" });
     }
+    if (password.length < 6) {
+      res.json({ error: "password length must be more than 6 characters" });
+    }
   }
 };
 
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  const userExists = await User.findOne({ email: email }).catch((error) => {
-    console.log(error);
-  });
+  try {
+    const userExists = await User.findOne({ email: email }).catch((error) => {
+      console.log(error);
+    });
 
-  if (!userExists) {
-    return res.json({ message: `User with that email doesn't exist` });
-  }
+    if (!userExists) {
+      return res.json({ message: `User with that email doesn't exist` });
+    }
 
-  if (userExists) {
-    if (userExists != null) {
-      const isMatch = await bcrypt.compare(password, userExists.password);
-      console.log(isMatch);
-      if (userExists.email === email && isMatch) {
-        // Generate JWT Token
-        const token = jwt.sign({ userID: userExists.id }, "myJWTSecret", {
-          expiresIn: "1d",
-        });
-        res.send({
-          status: "success",
-          message: "Login Success",
-          token: token,
-        });
+    if (userExists) {
+      if (userExists != null) {
+        const isMatch = await bcrypt.compare(password, userExists.password);
+        console.log(isMatch);
+        if (userExists.email === email && isMatch) {
+          // Generate JWT Token
+          const token = jwt.sign({ userID: userExists.id }, "myJWTSecret", {
+            expiresIn: "1d",
+          });
+          res.send({
+            status: "success",
+            message: "Login Success",
+            token: token,
+          });
+        } else {
+          res.send({
+            status: "failed",
+            message: "Email or Password is not Valid",
+          });
+        }
       } else {
         res.send({
           status: "failed",
-          message: "Email or Password is not Valid",
+          message: "You are not a Registered User",
         });
       }
-    } else {
-      res.send({
-        status: "failed",
-        message: "You are not a Registered User",
-      });
     }
+  } catch (error) {
+    console.log(error);
+    res.json({ error: "something went wrong" });
   }
 };
