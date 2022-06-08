@@ -55,8 +55,7 @@ sequelize
   });
 
 // localhost:8080/login ------------ post
-//   localhost:8080/payment ---------- post
-//   localhost:8080/all-invoices ------- get
+// localhost:8080/all-invoices ------- get
 // localhost:8080/invoice------------ post
 // localhost:8080/paypal-payment ------------ post
 // localhost:8080/edit-invoice ------------ patch

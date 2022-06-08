@@ -36,11 +36,11 @@ exports.contact = async (req, res, next) => {
 
     const savedEmail = await sendEmail.save();
 
-    const from = "";
+    const from = email;
 
     let mailOptions = {
       from: from,
-      to: "info@oreostudio.com",
+      to: "info@oreostudios.com",
       subject: subject,
       html: message,
     };
@@ -76,7 +76,7 @@ exports.getInTouch = async (req, res, next) => {
 
     let mailOptions = {
       from: from,
-      to: "info@oreostudio.com",
+      to: "info@oreostudios.com",
       html: message,
     };
     transporter.sendMail(mailOptions, (error, info) => {

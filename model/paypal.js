@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 
 const sequelize = require("../util/db");
 
-const Form = sequelize.define("form", {
+const PaypalForm = sequelize.define("aypalForm", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -41,4 +41,4 @@ const Form = sequelize.define("form", {
   payerID: DataTypes.STRING,
 });
 
-module.exports = Form;
+module.exports = PaypalForm;

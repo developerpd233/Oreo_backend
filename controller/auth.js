@@ -41,47 +41,70 @@ exports.signup = async (req, res, next) => {
   }
 };
 
+// exports.login = async (req, res, next) => {
+//   const { email, password } = req.body;
+
+//   try {
+//     const userExists = await User.findOne({ email: email }).catch((error) => {
+//       console.log(error);
+//     });
+
+//     if (!userExists) {
+//       return res.json({ message: `User with that email doesn't exist` });
+//     }
+
+//     if (userExists) {
+//       if (userExists != null) {
+//         const isMatch = await bcrypt.compare(password, userExists.password);
+//         console.log(isMatch);
+//         if (userExists.email === email && isMatch) {
+//           // Generate JWT Token
+//           const token = jwt.sign({ userID: userExists.id }, "myJWTSecret", {
+//             expiresIn: "1d",
+//           });
+//           res.send({
+//             status: "success",
+//             message: "Login Success",
+//             token: token,
+//           });
+//         } else {
+//           res.send({
+//             status: "failed",
+//             message: "Email or Password is not Valid",
+//           });
+//         }
+//       } else {
+//         res.send({
+//           status: "failed",
+//           message: "You are not a Registered User",
+//         });
+//       }
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.json({ error: "something went wrong" });
+//   }
+// };
+
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
-
   try {
-    const userExists = await User.findOne({ email: email }).catch((error) => {
-      console.log(error);
-    });
-
-    if (!userExists) {
-      return res.json({ message: `User with that email doesn't exist` });
+    if (!email && !password) {
+      res.json({ error: "Email or Password cannot be empty" });
     }
-
-    if (userExists) {
-      if (userExists != null) {
-        const isMatch = await bcrypt.compare(password, userExists.password);
-        console.log(isMatch);
-        if (userExists.email === email && isMatch) {
-          // Generate JWT Token
-          const token = jwt.sign({ userID: userExists.id }, "myJWTSecret", {
-            expiresIn: "1d",
-          });
-          res.send({
-            status: "success",
-            message: "Login Success",
-            token: token,
-          });
-        } else {
-          res.send({
-            status: "failed",
-            message: "Email or Password is not Valid",
-          });
-        }
+    const user = await User.findOne({ where: { email: email } });
+    if (user) {
+      const password_valid = await bcrypt.compare(password, user.password);
+      if (password_valid) {
+        token = jwt.sign({ id: user.id, email: user.email }, "MyJWTSecret");
+        res
+          .status(200)
+          .json({ msg: "Login Successful", token: token, status: "success" });
       } else {
-        res.send({
-          status: "failed",
-          message: "You are not a Registered User",
-        });
+        res.status(400).json({ error: "Password Incorrect", status: "failed" });
       }
+    } else {
+      res.status(404).json({ error: "User does not exist" });
     }
-  } catch (error) {
-    console.log(error);
-    res.json({ error: "something went wrong" });
-  }
+  } catch (error) {}
 };

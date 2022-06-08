@@ -19,10 +19,21 @@ let transporter = nodemailer.createTransport({
 const Form = require("../model/form");
 
 exports.getFormData = async (req, res) => {
-  const { price, currency, description, name, email, status, link } = req.body;
+  const {
+    price,
+    currency,
+    description,
+    name,
+    email,
+    status,
+    link,
+    paymentID,
+    createdAt,
+    payerID,
+  } = req.body;
   try {
     if (!price && !currency && !description && !name && !email) {
-      return res.json({ msg: "Please fill all the fields" });
+      return res.json({ msg: "Please fill all the fields except Link" });
     }
     const formData = new Form({
       price,
@@ -31,6 +42,9 @@ exports.getFormData = async (req, res) => {
       name,
       email,
       link,
+      paymentID,
+      createdAt,
+      payerID,
       status,
     });
 
@@ -47,16 +61,23 @@ exports.getFormData = async (req, res) => {
     if (!name) {
       res.json({ error: "Name cant be empty" });
     }
-    let isValid = email.includes("@");
-    if (!email || !isValid) {
-      res.json({ msg: "please provide a valid email" });
-    }
   }
 };
 
 exports.getInvoices = (req, res) => {
-  const { name, email, phone, price, currency, description, id, link, status } =
-    req.body;
+  const {
+    id,
+    name,
+    email,
+    phone,
+    price,
+    currency,
+    link,
+    status,
+    paymentID,
+    description,
+    createdAt,
+  } = req.body;
   Form.findAll()
     .then((allInvoices) => {
       if (!allInvoices) {

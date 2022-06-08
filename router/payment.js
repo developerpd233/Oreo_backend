@@ -5,20 +5,20 @@ const router = express.Router();
 const paymentController = require("../controller/paymentFlow");
 const paypalIntegrationController = require("../controller/paypalIntegration");
 
-router.post("/payment", paymentController.payment);
+// router.post("/payment", paymentController.payment);
 
 router.post("/invoice", paymentController.getFormData);
 
 router.get("/all-invoices", paymentController.getInvoices);
 
-router.get("invoice", paymentController.getInvoice);
-
-router.post("/paypal-payment", paypalIntegrationController.paypalIntegration);
-
-router.get("/success", paypalIntegrationController.success);
+router.get("/invoice", paymentController.getInvoice);
 
 router.patch("/edit-invoice/:invoiceID", paymentController.editInvoice);
 
 router.delete("/invoice/:invoiceID", paymentController.deleteInvoice);
+
+router.post("/paypal-payment", paypalIntegrationController.paypalIntegration);
+
+router.get("/success", paypalIntegrationController.success);
 
 module.exports = router;
