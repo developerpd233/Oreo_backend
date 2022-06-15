@@ -19,6 +19,7 @@
     "mysql2": "^2.3.3",
     "nodemailer": "^6.7.5",
     "paypal-rest-sdk": "^1.8.1",
+    "request": "^2.88.2",
     "sequelize": "^6.20.1",
     "stripe": "^9.5.0",
     "uuid": "^8.3.2"

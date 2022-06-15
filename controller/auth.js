@@ -96,7 +96,10 @@ exports.login = async (req, res, next) => {
     if (user) {
       const password_valid = await bcrypt.compare(password, user.password);
       if (password_valid) {
-        token = jwt.sign({ id: user.id, email: user.email }, "MyJWTSecret");
+        token = jwt.sign(
+          { id: user.id, email: user.email },
+          "pd_JWTSecret_123"
+        );
         res
           .status(200)
           .json({ msg: "Login Successful", token: token, status: "success" });
