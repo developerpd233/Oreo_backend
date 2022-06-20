@@ -37,10 +37,10 @@ exports.contact = async (req, res, next) => {
     const savedEmail = await sendEmail.save();
 
     const from = email;
-
+    const to = [email, "info@oreostudios.com"];
     let mailOptions = {
       from: from,
-      to: "info@oreostudios.com",
+      to: to,
       subject: subject,
       html: message,
     };
@@ -73,10 +73,11 @@ exports.getInTouch = async (req, res, next) => {
     const savedEmail = await sendEmail.save();
 
     const from = "";
+    const to = [email, "info@oreostudios.com"];
 
     let mailOptions = {
       from: from,
-      to: "info@oreostudios.com",
+      to: to,
       html: message,
     };
     transporter.sendMail(mailOptions, (error, info) => {
